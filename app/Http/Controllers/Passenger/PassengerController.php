@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Http\Controllers\Passenger;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class PassengerController extends Controller
+{
+    public function homepage() {
+        return view('passenger.homepage');
+    }
+}
