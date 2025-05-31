@@ -43,5 +43,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 
 Route::group(['middleware' => 'auth:staff', 'prefix' => 'staff'], function() {
     Route::get('dashboard', [StaffController::class, 'index'])->name('staff-dashboard');
+
+    //Flight
+    Route::get('flights', [StaffController::class, 'flightIndex'])->name('staff-flights-list');
 });
 
