@@ -90,25 +90,36 @@
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Flight No.</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">From</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Take Off</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">To</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Arrival</th>
                         <th class="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
+                <tbody class="divide-y text-left divide-gray-200">
+                    @foreach ($flights as $flight )
+                     @php
+                        preg_match('/\d+$/', $flight->flight_number, $numberMatch);
+                        $number = $numberMatch[0] ?? '';
+
+                        $lettersOnly = preg_replace('/\d+/', '', $flight->flight_number);
+                        $consonants = preg_replace('/[aeiou\s]/i', '', $lettersOnly);
+
+                        $flightNumber = strtoupper($consonants) . $number;
+                    @endphp
                     <tr>
-                        <td class="px-6 py-4 text-sm font-medium text-gray-800"></td>
-                        <td class="px-6 py-4 text-sm text-gray-700"></td>
-                        <td class="px-6 py-4 text-sm text-gray-700"></td>
-                        <td class="px-6 py-4 text-sm text-gray-700"></td>
-                        <td class="px-6 py-4 text-sm text-gray-700"></td>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-800">{{$flightNumber}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-700">{{$flight->departureAirport->name}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-700">{{$flight->arrivalAirport->name}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-700">{{$flight->arrival_date}} : {{$flight->arrival_time}}</td>
                         <td class="px-6 py-4 text-sm text-right">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                            <button
+                            onclick="window.location.href='{{route('passenger-booking', ['fid' => $flight->id])}}'"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
                                 Book
                             </button>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
              <div class="flex justify-between items-center px-4 py-3">
@@ -136,20 +147,30 @@
         </div>
     </div>
 
-    <div class="mt-6 flex items-center">
+    <div class="mt-6 mb-4 flex items-center">
         <hr class="flex-grow border-t-2 border-gray-300">
         <span class="mx-4 text-3xl font-bold font-arial text-yellow-300">UPCOMING FLIGHTS</span>
         <hr class="flex-grow border-t-2 border-gray-300">
     </div>
 
     <div class="px-4 max-w-6xl mx-auto pb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach ($upcomingFlights as $flight)
+         @php
+            preg_match('/\d+$/', $flight->flight_number, $numberMatch);
+            $number = $numberMatch[0] ?? '';
+
+            $lettersOnly = preg_replace('/\d+/', '', $flight->flight_number);
+            $consonants = preg_replace('/[aeiou\s]/i', '', $lettersOnly);
+
+            $flightNumber = strtoupper($consonants) . $number;
+        @endphp
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl hover:scale-[1.02]">
             <div class="relative aspect-[3/2]">
                 <img src="{{ asset('web_images/Rectangle 6.png') }}" alt="Flight Image"
                     class="absolute inset-0 w-full h-full object-cover">
             </div>
             <div class="p-5">
-                <h3 class="text-xl font-semibold text-gray-800 mb-1">Flight Title</h3>
+                <h3 class="text-xl font-semibold text-gray-800 mb-1">{{$flightNumber}}</h3>
                 <p class="text-sm text-gray-500">Departure: May 31, 2025</p>
                 <div class="mt-4">
                     <a href="#" class="inline-block bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition">
@@ -158,6 +179,7 @@
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
 
 </body>

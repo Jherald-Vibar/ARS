@@ -32,6 +32,8 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => 'auth:passenger', 'prefix' => 'passenger'], function() {
     Route::get('homepage', [PassengerController::class, 'homepage'])->name('passenger-dashboard');
+    Route::get('booking/{fid}', [PassengerController::class, 'bookingPage'])->name('passenger-booking');
+    Route::post('booking-store/{fid}', [PassengerController::class, 'bookingStore'])->name('passenger-booking-store');
 });
 
 
@@ -50,5 +52,6 @@ Route::group(['middleware' => 'auth:staff', 'prefix' => 'staff'], function() {
 
     //Flight
     Route::get('flights', [StaffController::class, 'flightIndex'])->name('staff-flights-list');
+    Route::post('flights', [StaffController::class, 'flightStore'])->name('staff-flights-store');
 });
 

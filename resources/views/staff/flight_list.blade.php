@@ -13,32 +13,68 @@
         </button>
 </div>
 
-<!-- Flight List -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach($flights as $flight)
-    <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
-        <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-semibold text-gray-800">{{ $flight->flight_number }}</h3>
-            <span class="text-xs px-2 py-1 rounded-full bg-gray-200 text-gray-700">{{ $flight->status }}</span>
+        @php
+            preg_match('/\d+$/', $flight->flight_number, $numberMatch);
+            $number = $numberMatch[0] ?? '';
+
+            $lettersOnly = preg_replace('/\d+/', '', $flight->flight_number);
+            $consonants = preg_replace('/[aeiou\s]/i', '', $lettersOnly);
+
+            $flightNumber = strtoupper($consonants) . $number;
+        @endphp
+
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 transition transform hover:scale-[1.01] hover:shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M2.5 19l6.5-6.5m0 0l6.5-6.5m-6.5 6.5h13" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-gray-800">{{ $flightNumber }}</h3>
+                </div>
+                <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+                    {{ ucfirst($flight->status) }}
+                </span>
+            </div>
+
+            <div class="text-sm text-gray-600 space-y-1">
+                <p class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path d="M17.657 16.657L13.414 12l4.243-4.243m0 0L12 2.343m5.657 5.414L12 12m0 0L6.343 6.343m5.657 5.657L2.343 12m5.414 5.657L12 12m0 0l4.243 4.243" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <strong>Route:</strong> {{ $flight->departureAirport->name }} → {{ $flight->arrivalAirport->name }}
+                </p>
+                <p class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2v-6H3v6a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <strong>Departure:</strong> {{ $flight->departure_date }} @ {{ \Carbon\Carbon::parse($flight->departure_time)->format('h:i A') }}
+                </p>
+                <p class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <strong>Arrival:</strong> {{ $flight->arrival_date }} @ {{ \Carbon\Carbon::parse($flight->arrival_time)->format('h:i A') }}
+                </p>
+            </div>
+
+            <div class="mt-4 text-sm text-gray-600">
+                <p class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 01.894.553l2.447 4.95 5.467.796a1 1 0 01.554 1.706l-3.956 3.857.934 5.447a1 1 0 01-1.451 1.054L10 17.75l-4.889 2.573a1 1 0 01-1.451-1.054l.934-5.447-3.956-3.857a1 1 0 01.554-1.706l5.467-.796L9.106 2.553A1 1 0 0110 2z"/>
+                    </svg>
+                    <strong>Prices:</strong>
+                    F: ₱{{ number_format($flight->first_class_ticket_price) }},
+                    B: ₱{{ number_format($flight->business_class_ticket_price) }},
+                    E: ₱{{ number_format($flight->economy_class_ticket_price) }}
+                </p>
+            </div>
         </div>
-        <p class="text-sm text-gray-500">
-            <strong>Route:</strong> {{ $flight->departureAirport->name }} → {{ $flight->arrivalAirport->name }}
-        </p>
-        <p class="text-sm text-gray-500">
-            <strong>Departure:</strong> {{ $flight->departure_date }} {{ $flight->departure_time }}
-        </p>
-        <p class="text-sm text-gray-500">
-            <strong>Arrival:</strong> {{ $flight->arrival_date }} {{ $flight->arrival_time }}
-        </p>
-        <p class="text-sm text-gray-500 mt-2">
-            <strong>Prices:</strong>
-            F: ₱{{ $flight->first_class_ticket_price }},
-            B: ₱{{ $flight->business_class_ticket_price }},
-            E: ₱{{ $flight->economy_class_ticket_price }}
-        </p>
-    </div>
     @endforeach
 </div>
+
 
 <!-- Create New Flight Modal -->
 <div id="addFlightModal" tabindex="-1" aria-hidden="true"
@@ -61,7 +97,7 @@
                 </button>
             </div>
 
-            <form action="" method="POST" class="p-6 space-y-4">
+            <form action="{{route('staff-flights-store')}}" method="POST" class="p-6 space-y-4">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

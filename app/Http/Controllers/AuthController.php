@@ -50,7 +50,7 @@ class AuthController extends Controller
             'passport_number' => $validated['passport_number'],
         ]);
 
-        return redirect()->back()->with('success', "Account Successfully Created!");
+        return redirect()->route('loginForm')->with('success', "Account Successfully Created!");
     }
 
     public function authenticate(Request $request)
