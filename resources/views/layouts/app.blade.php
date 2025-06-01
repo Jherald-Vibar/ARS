@@ -54,6 +54,30 @@
                         </svg>
                         <span>Staffs</span>
                     </a>
+                    <a
+                        href="{{route('admin-aircraft-list')}}"
+                        class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-800 transition"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M17 11v2a4 4 0 01-4 4H7" />
+                            <path d="M19 16v-1a4 4 0 00-4-4h-1" />
+                        </svg>
+                        <span>Aircraft</span>
+                    </a>
+                    <a
+                        href="{{route('admin-airport-list')}}"
+                        class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-800 transition"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M17 11v2a4 4 0 01-4 4H7" />
+                            <path d="M19 16v-1a4 4 0 00-4-4h-1" />
+                        </svg>
+                        <span>Airport</span>
+                    </a>
                 </nav>
             </div>
             <div>

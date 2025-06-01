@@ -39,6 +39,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
     Route::get('dashboard', [AdminController::class, 'index'])->name('admin-dashboard');
     Route::get('staff-list', [AdminController::class, 'staffIndex'])->name('admin-staff-list');
     Route::post('staff-store', [AdminController::class, 'staffStore'])->name('admin-staff-store');
+    Route::get('aircraft', [AdminController::class, 'aircraftIndex'])->name('admin-aircraft-list');
+    Route::post('aircraft', [AdminController::class, 'aircraftStore'])->name('admin-aircraft-store');
+    Route::get('airport', [AdminController::class, 'airportIndex'])->name('admin-airport-list');
+    Route::post('airport', [AdminController::class, 'airportStore'])->name('admin-airport-store');
 });
 
 Route::group(['middleware' => 'auth:staff', 'prefix' => 'staff'], function() {
