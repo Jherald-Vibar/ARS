@@ -48,7 +48,7 @@ class PassengerController extends Controller
 
         $validated = $validator->validated();
 
-        $hasBooked = Booking::where('user_id', $user->id)->first();
+        $hasBooked = Booking::where('user_id', $user->id)->where('flight_id', $flight->id)->first();
 
         if($hasBooked) {
             return redirect()->back()->with('error', "Already Book!");

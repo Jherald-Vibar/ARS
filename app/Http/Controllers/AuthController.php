@@ -80,12 +80,15 @@ class AuthController extends Controller
 
         if(Auth::guard('passenger')->check()) {
             Auth::guard('passenger')->logout();
+            session()->invalidate();
             session()->regenerateToken();
         } elseif(Auth::guard('staff')->check()) {
             Auth::guard('staff')->logout();
+            session()->invalidate();
             session()->regenerateToken();
         } else {
             Auth::logout();
+            session()->invalidate();
             session()->regenerateToken();
         }
 

@@ -49,7 +49,7 @@
                         </svg>
                         <span>Flights</span>
                     </a>
-                    <a href="{{ route('admin-staff-list') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-800 transition">
+                    <a href="" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-blue-800 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round"

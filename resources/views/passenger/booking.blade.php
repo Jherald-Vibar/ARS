@@ -1,5 +1,4 @@
 @extends('layouts.passenger_app')
-
 @section('content')
 <div class="max-w-6xl mx-auto px-6 py-10">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -193,7 +192,7 @@
         </div>
          <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-6 h-fit">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Booking Summary</h2>
-            <form method="POST" action="{{route('passenger-booking-store', ['fid' => $flight->id])}}" class="space-y-4">
+            <form method="POST" id="bookingForm" action="{{route('passenger-booking-store', ['fid' => $flight->id])}}" class="space-y-4">
                 @csrf
                 <div>
                     <label for="selectedSeatDisplay" class="block text-sm font-medium text-gray-600">Selected Seat</label>
@@ -231,7 +230,10 @@
                     </button>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200">
+                <button
+                    type="submit"
+                    id="submitBookingBtn"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200">
                     Create Booking
                 </button>
             </form>
@@ -239,7 +241,36 @@
     </div>
 </div>
 @endsection
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+   document.addEventListener("DOMContentLoaded", function() {
+        @if(session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+         @if(session('error'))
+            Swal.fire({
+                title: 'Error!',
+                text: "{{ session('error') }}",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                title: "Validation Error!",
+                text: `{!! implode('<br>', $errors->all()) !!}`,
+                icon: "error"
+            });
+        @endif
+    });
+
 document.addEventListener('DOMContentLoaded', () => {
     const maxPassengersSelect = document.getElementById('passengers');
     let maxSelectableSeats = parseInt(maxPassengersSelect.value);
@@ -354,7 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
         passengerFormContainer.insertAdjacentHTML('beforeend', passengerFields);
     });
     }
-
     function showSlide(index) {
         const slides = passengerFormContainer.querySelectorAll('.passenger-slide');
         slides.forEach((slide, i) => {
@@ -363,7 +393,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         updateNavButtons();
     }
-
     function updateNavButtons() {
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex === seats.length - 1 || seats.length === 0;
@@ -378,7 +407,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showSlide(currentIndex);
         }
     });
-
     nextBtn.addEventListener('click', () => {
         if (currentIndex < seats.length - 1) {
             currentIndex++;
@@ -387,4 +415,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     updateNavButtons();
 });
+
+  document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('submitBookingBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to proceed with booking?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, book it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('bookingForm').submit();
+                }
+            });
+        });
+    });
 </script>

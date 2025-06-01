@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
     public function index() {
-        return view('admin.dashboard');
+        $totalStaffs = Staff::count();
+        $staffs = Staff::all();
+        return view('admin.dashboard', compact('totalStaffs', 'staffs'));
     }
 
     public function staffIndex() {

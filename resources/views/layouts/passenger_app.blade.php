@@ -9,16 +9,31 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.5/dist/flowbite.min.js"></script>
     <link rel="icon" href="{{ asset('web_images/image 1.png') }}">
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 <body class="bg-white text-gray-900 font-sans">
     <nav class="fixed top-0 right-0 z-50 p-4 w-full bg-white shadow-md">
         @auth('passenger')
         <ul class="flex justify-end items-center space-x-6 font-semibold text-sm text-gray-700">
-            <li><a href="{{route('passenger-dashboard')}}" class="hover:text-blue-600">Home</a></li>
+            <li><a href="{{ route('passenger-dashboard') }}" class="hover:text-blue-600">Home</a></li>
             <li><a href="#" class="hover:text-blue-600">Flight</a></li>
-            <li class="flex items-center gap-2">
-                <img src="{{ asset('web_images/image 1.png') }}" alt="User Icon" class="w-6 h-6">
-                <a href="{{route('loginForm')}}" class="hover:text-blue-600">{{ Auth::guard('passenger')->user()->name }}</a>
+            <li x-data="{ open: false }" class="relative">
+                <button @click="open = !open" class="flex items-center gap-2 focus:outline-none">
+                    <img src="{{ asset('web_images/image 1.png') }}" alt="User Icon" class="w-6 h-6 rounded-full">
+                    <span class="hover:text-blue-600">{{ Auth::guard('passenger')->user()->name }}</span>
+                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-md z-50">
+                    <form method="POST" action="{{ route('logout') }}" class="block">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Logout
+                        </button>
+                    </form>
+                </div>
             </li>
         </ul>
         @endauth

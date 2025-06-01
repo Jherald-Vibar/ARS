@@ -22,12 +22,11 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-500">Total Staffs</p>
-                        <h2 class="text-2xl font-bold text-gray-800">0</h2>
+                        <h2 class="text-2xl font-bold text-gray-800">{{$totalStaffs}}</h2>
                     </div>
                 </div>
             </div>
 
-            {{-- Active Staffs --}}
             <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition h-1/2">
                 <div class="flex items-center space-x-4 h-full">
                     <div class="bg-green-100 p-3 rounded-full">
@@ -45,34 +44,39 @@
             </div>
         </div>
 
-        {{-- Right: Recent Account Creations --}}
         <div class="bg-white p-6 rounded-2xl shadow-md xl:col-span-2 h-full overflow-auto">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-semibold text-gray-700">Recent Account Creations</h2>
             </div>
-
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-600">
                     <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
                         <tr>
                             <th class="px-4 py-3">ID</th>
                             <th class="px-4 py-3">Name</th>
+                            <th class="px-4 py-3">Email</th>
                             <th class="px-4 py-3">Created At</th>
-                            <th class="px-4 py-3">Role</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        {{-- Example Empty Row --}}
-                        <tr>
-                            <td colspan="4" class="text-center px-4 py-6 text-gray-400">
-                                No recent account creation
-                            </td>
-                        </tr>
+                         @forelse($staffs as $staff)
+                            <tr>
+                                <td class="px-4 py-3">{{ $staff->id }}</td>
+                                <td class="px-4 py-3">{{ $staff->name }}</td>
+                                <td class="px-4 py-3">{{ $staff->email }}</td>
+                                <td class="px-4 py-3">{{ $staff->created_at->format('M d, Y') }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center px-4 py-6 text-gray-400">
+                                    No recent account creation
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
 </div>
 @endsection

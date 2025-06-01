@@ -30,14 +30,14 @@ Route::post('register', [AuthController::class,  'accountStore'])->name('passeng
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 
-Route::group(['middleware' => 'auth:passenger', 'prefix' => 'passenger'], function() {
+Route::group(['middleware' => ['auth:passenger', 'no.cache'], 'prefix' => 'passenger'], function() {
     Route::get('homepage', [PassengerController::class, 'homepage'])->name('passenger-dashboard');
     Route::get('booking/{fid}', [PassengerController::class, 'bookingPage'])->name('passenger-booking');
     Route::post('booking-store/{fid}', [PassengerController::class, 'bookingStore'])->name('passenger-booking-store');
 });
 
 
-Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
+Route::group(['middleware' => ['auth', 'no.cache'], 'prefix' => 'admin'], function() {
     Route::get('dashboard', [AdminController::class, 'index'])->name('admin-dashboard');
     Route::get('staff-list', [AdminController::class, 'staffIndex'])->name('admin-staff-list');
     Route::post('staff-store', [AdminController::class, 'staffStore'])->name('admin-staff-store');
@@ -47,7 +47,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
     Route::post('airport', [AdminController::class, 'airportStore'])->name('admin-airport-store');
 });
 
-Route::group(['middleware' => 'auth:staff', 'prefix' => 'staff'], function() {
+Route::group(['middleware' => ['auth:staff', 'no.cache'], 'prefix' => 'staff'], function() {
     Route::get('dashboard', [StaffController::class, 'index'])->name('staff-dashboard');
 
     //Flight

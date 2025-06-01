@@ -74,7 +74,28 @@
 </div>
 
 <!-- Modal Scripts -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+     document.addEventListener("DOMContentLoaded", function() {
+        @if(session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                title: "Validation Error!",
+                text: `{!! implode('<br>', $errors->all()) !!}`,
+                icon: "error"
+            });
+        @endif
+    });
+
     function openModal() {
         document.getElementById('aircraftModal').classList.remove('hidden');
         document.getElementById('aircraftModal').classList.add('flex');
