@@ -186,7 +186,7 @@
             </div>
             <div class="p-5">
                 <h3 class="text-xl font-semibold text-gray-800 mb-1">{{$flightNumber}}</h3>
-                <p class="text-sm text-gray-500">Departure: May 31, 2025</p>
+                <p class="text-sm text-gray-500">Departure: {{\Carbon\Carbon::parse($flight->departure_date)->format('M-d Y')}}</p>
                 <div class="mt-4">
                     <a href="#" class="inline-block bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition">
                         Book Now
@@ -196,6 +196,33 @@
         </div>
         @endforeach
     </div>
+
+    <footer class="bg-blue-900 rounded-lg shadow-sm text-white">
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+                <img src="{{asset('web_images/image 1.png')}}" class="h-8" alt="Flowbite Logo" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap">{{config('app.name')}}</span>
+            </a>
+            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-white sm:mb-0">
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">About</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <hr class="my-6 border-blue-800 sm:mx-auto lg:my-8" />
+        <span class="block text-sm text-white sm:text-center">&copy; 2025 <a href="{{asset('web_images/image 1.png')}}" class="hover:underline">{{config('app.name')}}</a>. All Rights Reserved.</span>
+    </div>
+</footer>
 
 </body>
 </html>
