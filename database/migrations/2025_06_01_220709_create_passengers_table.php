@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('passport_number');
             $table->string('seat_number');
+            $table->string('seat_class');
             $table->timestamps();
         });
     }

@@ -41,6 +41,7 @@ class AdminController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $password,
+            'status' => "offline",
         ]);
 
         return redirect()->back()->with('success', "Staff Successfully Created!");

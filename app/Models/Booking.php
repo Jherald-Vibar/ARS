@@ -31,4 +31,29 @@ class Booking extends Model
     {
         return $this->belongsTo(Flights::class);
     }
+
+    public function calculateAmount($bookingId)
+    {
+        $booking = Booking::with(['passengers', 'flight'])->findOrFail($bookingId);
+        $flight = $booking->flight;
+
+        $totalAmount = 0;
+
+        foreach ($booking->passengers as $passenger) {
+            switch ($passenger->seat_class) {
+                case 'first':
+                    $totalAmount += $flight->first_class_ticket_price;
+                    break;
+                case 'business':
+                    $totalAmount += $flight->business_class_ticket_price;
+                    break;
+                case 'economy':
+                default:
+                    $totalAmount += $flight->economy_class_ticket_price;
+                    break;
+            }
+        }
+
+        return $totalAmount;
+    }
 }

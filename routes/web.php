@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\StripeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Passenger\PassengerController;
 use App\Http\Controllers\Staff\StaffController;
@@ -34,6 +35,10 @@ Route::group(['middleware' => ['auth:passenger', 'no.cache'], 'prefix' => 'passe
     Route::get('homepage', [PassengerController::class, 'homepage'])->name('passenger-dashboard');
     Route::get('booking/{fid}', [PassengerController::class, 'bookingPage'])->name('passenger-booking');
     Route::post('booking-store/{fid}', [PassengerController::class, 'bookingStore'])->name('passenger-booking-store');
+
+    //Payment
+    Route::get('payment/{bid}', [StripeController::class, 'showForm'])->name('stripe-form');
+    Route::post('payment-stripe/{bid}', [StripeController::class, 'processStripePayment'])->name('payment-stripe');
 });
 
 

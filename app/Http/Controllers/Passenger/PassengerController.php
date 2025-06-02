@@ -24,7 +24,7 @@ class PassengerController extends Controller
         $user = Auth::guard('passenger')->user();
         $flight = Flights::with('aircraft')->findOrFail($fid);
         $bookedSeat = Passenger::whereHas('booking', function ($query) use ($flight) {
-        $query->where('flight_id', $flight->id);
+        $query->where('flight_id', $flight->id)->where('status', 'confirmed');
          })->pluck('seat_number')->toArray();
         return view('passenger.booking', compact('flight', 'user', 'bookedSeat'));
     }
@@ -40,19 +40,25 @@ class PassengerController extends Controller
             'passengers.*.email' => 'required|email|max:255',
             'passengers.*.passport_number' => 'required|string|max:100',
             'passengers.*.seat' => 'required|string|max:10',
+            'passengers.*.seat_class' => 'required',
         ]);
+
+
 
         if($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+
         $validated = $validator->validated();
 
-        $hasBooked = Booking::where('user_id', $user->id)->where('flight_id', $flight->id)->first();
+
+
+        /*$hasBooked = Booking::where('user_id', $user->id)->where('flight_id', $flight->id)->first();
 
         if($hasBooked) {
             return redirect()->back()->with('error', "Already Book!");
-        }
+        }*/
 
         $booking = Booking::create([
             'user_id' => $user->id,
@@ -70,9 +76,11 @@ class PassengerController extends Controller
                 'email' => $passengerData['email'],
                 'passport_number' => $passengerData['passport_number'],
                 'seat_number' => $passengerData['seat'],
+                'seat_class' => $passengerData['seat_class'],
             ]);
         }
 
-        return redirect()->back()->with('success', "Booking Success!");
+        return redirect()->route('stripe-form', ['bid' => $booking->id])->with('notice', "Please pay!");
+        //return redirect()->back()->with('success', "Booking Success!");
     }
 }

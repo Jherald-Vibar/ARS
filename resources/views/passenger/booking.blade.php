@@ -122,11 +122,11 @@
                     @for ($row = 1; $row <= $rows; $row++)
                         @php
                             if ($row <= $firstClassLimit) {
-                                $seatClass = 'First Class';
+                                $seatClass = 'first';
                             } elseif ($row <= $businessClassLimit) {
-                                $seatClass = 'Business Class';
+                                $seatClass = 'business';
                             } else {
-                                $seatClass = 'Economy';
+                                $seatClass = 'economy';
                             }
 
                             $showHeader = ($row == 1 || $row == $firstClassLimit + 1 || $row == $businessClassLimit + 1);
@@ -354,6 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function generatePassengerForms(seatList) {
     passengerFormContainer.innerHTML = '';
     seatList.forEach((seat, index) => {
+        const seatClass = selectedSeats[index].dataset.class;
         const passengerFields = `
             <div class="passenger-slide absolute top-0 left-0 w-full h-full transition-opacity duration-500 rounded-md bg-white p-5 shadow-md flex flex-col gap-4"
                 style="opacity: ${index === 0 ? 1 : 0}; pointer-events: ${index === 0 ? 'auto' : 'none'};">
@@ -379,6 +380,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <label class="text-sm font-medium text-gray-600">Seat Number</label>
                 <input type="text" name="passengers[${index}][seat_number]" value="${seat}" readonly
+                    class="w-full rounded-md border border-gray-300 px-4 py-2 bg-gray-100 cursor-not-allowed">
+
+                <label class="text-sm font-medium text-gray-600">Seat Class</label>
+                <input type="text" name="passengers[${index}][seat_class]" value="${seatClass}" readonly
                     class="w-full rounded-md border border-gray-300 px-4 py-2 bg-gray-100 cursor-not-allowed">
             </div>
         `;

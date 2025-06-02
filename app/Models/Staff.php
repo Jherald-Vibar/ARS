@@ -17,6 +17,7 @@ class Staff extends Authenticatable
         'name',
         'email',
         'password',
+        'status',
     ];
 
     protected $hidden = [

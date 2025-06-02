@@ -70,6 +70,8 @@ class AuthController extends Controller
         } elseif (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->route('admin-dashboard')->with('success', "Successfully Login");
         } elseif(Auth::guard('staff')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::guard('staff')->user();
+            $user->update(['status' => 'online']);
             return redirect()->route('staff-dashboard')->with('success', "Successfully Login!");
         }
 
@@ -83,6 +85,7 @@ class AuthController extends Controller
             session()->invalidate();
             session()->regenerateToken();
         } elseif(Auth::guard('staff')->check()) {
+            Auth::guard('staff')->user()->update(['status' => 'offline']);
             Auth::guard('staff')->logout();
             session()->invalidate();
             session()->regenerateToken();

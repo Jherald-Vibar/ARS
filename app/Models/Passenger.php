@@ -14,6 +14,7 @@ class Passenger extends Model
         'email',
         'passport_number',
         'seat_number',
+        'seat_class',
     ];
 
     public function booking()
