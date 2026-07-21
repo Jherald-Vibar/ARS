@@ -1,41 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6">
-    <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-800">Staff List</h1>
+<div class="max-w-6xl mx-auto space-y-8">
+    <div class="flex items-end justify-between">
+        <div>
+            <div class="mb-1 text-xs font-bold tracking-widest uppercase text-sky">Personnel</div>
+            <h1 class="text-3xl font-extrabold font-display text-navy">Staff List</h1>
+        </div>
         <button
             onclick="document.getElementById('addStaffModal').classList.remove('hidden')"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            class="font-display font-bold text-sm bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-mid transition"
             type="button"
         >
             + Add Staff
         </button>
     </div>
 
-    <div class="bg-white shadow-md rounded-lg overflow-x-auto">
-        <table class="min-w-full text-sm text-left text-gray-700">
-            <thead class="bg-gray-100 text-xs uppercase">
+    <div class="overflow-x-auto bg-white border shadow-sm rounded-2xl border-slate-200">
+        <table class="min-w-full text-sm text-left text-slate-700">
+            <thead class="text-xs tracking-wide uppercase bg-slate-50 text-slate-500">
                 <tr>
-                    <th class="px-6 py-3">#</th>
-                    <th class="px-6 py-3">Name</th>
-                    <th class="px-6 py-3">Email</th>
-                    <th class="px-6 py-3">Created At</th>
-                    <th class="px-6 py-3">Actions</th>
+                    <th class="px-6 py-4 font-semibold">#</th>
+                    <th class="px-6 py-4 font-semibold">Name</th>
+                    <th class="px-6 py-4 font-semibold">Email</th>
+                    <th class="px-6 py-4 font-semibold">Created At</th>
+                    <th class="px-6 py-4 font-semibold">Actions</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200">
+            <tbody class="divide-y divide-slate-100">
                 @if(!empty($staffs) && $staffs->count() > 0)
                     @foreach ($staffs as $staff )
-                    <tr>
-                        <td class="px-6 py-4">{{$staff->id}}</td>
-                        <td class="px-6 py-4">{{$staff->name}}</td>
+                    <tr class="transition hover:bg-slate-50/70">
+                        <td class="px-6 py-4 text-slate-400">{{$staff->id}}</td>
+                        <td class="px-6 py-4 font-bold font-display text-navy">{{$staff->name}}</td>
                         <td class="px-6 py-4">{{$staff->email}}</td>
-                        <td class="px-6 py-4">{{$staff->created_at->format('Y-m-d H:i')}}</td>
-                        <td class="px-6 py-4 space-x-4">
+                        <td class="px-6 py-4 text-slate-500">{{$staff->created_at->format('Y-m-d H:i')}}</td>
+                        <td class="px-6 py-4 space-x-3">
                             <button
                                 type="button"
-                                class="text-blue-600 hover:underline edit-btn"
+                                class="font-medium text-sky hover:underline edit-btn"
                                 data-id="{{ $staff->id }}"
                                 data-name="{{ $staff->name }}"
                                 data-email="{{ $staff->email }}"
@@ -50,14 +53,14 @@
                             >
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline delete-btn">Delete</button>
+                                <button type="submit" class="font-medium text-red-500 hover:underline delete-btn">Delete</button>
                             </form>
                         </td>
                     </tr>
                     @endforeach
                 @else
                 <tr>
-                    <td colspan="6" class="text-center py-6 text-gray-400">No staff found</td>
+                    <td colspan="6" class="py-10 text-center text-slate-400">No staff found</td>
                 </tr>
                 @endif
             </tbody>
@@ -65,28 +68,28 @@
     </div>
 </div>
 
-<div id="addStaffModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-  <div class="relative p-6 w-full max-w-md rounded-lg bg-white">
+<div id="addStaffModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-navy/40 backdrop-blur-sm">
+  <div class="relative w-full max-w-md bg-white shadow-2xl p-7 rounded-2xl">
     <button
       onclick="document.getElementById('addStaffModal').classList.add('hidden')"
-      class="absolute top-2 right-2 text-gray-600 hover:text-black text-lg font-bold"
+      class="absolute text-xl leading-none top-4 right-4 text-slate-400 hover:text-navy"
       type="button"
     >&times;</button>
 
-    <h3 class="text-lg font-semibold text-gray-900 mb-4">Add New Staff</h3>
+    <h3 class="mb-5 text-xl font-bold font-display text-navy">Add New Staff</h3>
 
     <form action="{{route('admin-staff-store')}}" method="POST" class="space-y-4" onsubmit="confirmAdd(event);">
       @csrf
       <div>
-        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-        <input type="text" id="name" name="name" class="w-full px-3 py-2 border rounded-lg" required>
+        <label for="name" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Name</label>
+        <input type="text" id="name" name="name" class="w-full px-3.5 py-2.5 border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none rounded-lg transition" required>
       </div>
       <div>
-        <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
-        <input type="email" id="email" name="email" class="w-full px-3 py-2 border rounded-lg" required>
+        <label for="email" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Email</label>
+        <input type="email" id="email" name="email" class="w-full px-3.5 py-2.5 border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none rounded-lg transition" required>
       </div>
-      <div class="text-right">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+      <div class="pt-2 text-right">
+        <button type="submit" class="font-display font-bold text-sm bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-mid transition">
           Save
         </button>
       </div>
@@ -94,30 +97,30 @@
   </div>
 </div>
 
-<div id="editStaffModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-  <div class="relative p-6 w-full max-w-md rounded-lg bg-white">
+<div id="editStaffModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-navy/40 backdrop-blur-sm">
+  <div class="relative w-full max-w-md bg-white shadow-2xl p-7 rounded-2xl">
     <button
       onclick="document.getElementById('editStaffModal').classList.add('hidden')"
-      class="absolute top-2 right-2 text-gray-600 hover:text-black text-lg font-bold"
+      class="absolute text-xl leading-none top-4 right-4 text-slate-400 hover:text-navy"
       type="button"
     >&times;</button>
 
-    <h3 class="text-lg font-semibold text-gray-900 mb-4">Edit Staff</h3>
+    <h3 class="mb-5 text-xl font-bold font-display text-navy">Edit Staff</h3>
 
     <form id="editStaffForm" method="POST" class="space-y-4" onsubmit="confirmUpdate(event);">
       @csrf
       @method('PUT')
       <input type="hidden" id="edit_id" name="id">
       <div>
-        <label for="edit_name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-        <input type="text" id="edit_name" name="name" class="w-full px-3 py-2 border rounded-lg" required>
+        <label for="edit_name" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Name</label>
+        <input type="text" id="edit_name" name="name" class="w-full px-3.5 py-2.5 border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none rounded-lg transition" required>
       </div>
       <div>
-        <label for="edit_email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
-        <input type="email" id="edit_email" name="email" class="w-full px-3 py-2 border rounded-lg" required>
+        <label for="edit_email" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Email</label>
+        <input type="email" id="edit_email" name="email" class="w-full px-3.5 py-2.5 border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none rounded-lg transition" required>
       </div>
-      <div class="text-right">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+      <div class="pt-2 text-right">
+        <button type="submit" class="font-display font-bold text-sm bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-mid transition">
           Update
         </button>
       </div>
@@ -136,6 +139,8 @@
         title: 'Are you sure you want to add this staff?',
         icon: 'question',
         showCancelButton: true,
+        confirmButtonColor: '#000053',
+        cancelButtonColor: '#94a3b8',
         confirmButtonText: 'Yes, add',
         cancelButtonText: 'Cancel',
         }).then((result) => {
@@ -158,6 +163,8 @@
                     title: 'Are you sure you want to edit this staff?',
                     icon: 'question',
                     showCancelButton: true,
+                    confirmButtonColor: '#000053',
+                    cancelButtonColor: '#94a3b8',
                     confirmButtonText: 'Yes, edit',
                     cancelButtonText: 'Cancel',
                 }).then((result) => {
@@ -211,6 +218,8 @@
             title: 'Are you sure you want to update this staff?',
             icon: 'question',
             showCancelButton: true,
+            confirmButtonColor: '#000053',
+            cancelButtonColor: '#94a3b8',
             confirmButtonText: 'Yes, update',
             cancelButtonText: 'Cancel',
         }).then((result) => {

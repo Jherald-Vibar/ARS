@@ -1,74 +1,74 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 min-h-screen">
-    {{-- Page Header --}}
-    <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+<div class="max-w-6xl mx-auto space-y-8">
+    <div>
+        <div class="mb-1 text-xs font-bold tracking-widest uppercase text-sky">Overview</div>
+        <h1 class="text-3xl font-extrabold font-display text-navy">Admin Dashboard</h1>
+    </div>
 
-    {{-- Main Layout: Left and Right Side-by-Side --}}
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 h-[600px]"> {{-- Fixed height for alignment --}}
+    <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
 
         {{-- Left: Staff Stats --}}
-        <div class="flex flex-col justify-between h-full space-y-6 xl:col-span-1">
-            {{-- Total Staffs --}}
-            <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition h-1/2">
-                <div class="flex items-center space-x-4 h-full">
-                    <div class="bg-blue-100 p-3 rounded-full">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
+        <div class="flex flex-col gap-6 xl:col-span-1">
+            <div class="p-6 transition bg-white border shadow-sm rounded-2xl border-slate-200 hover:shadow-md">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-navy/8 p-3.5 rounded-xl">
+                        <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" stroke-width="2"
                              viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M17 20h5v-2a4 4 0 00-5-4M9 20H4v-2a4 4 0 015-4m6 4a4 4 0 10-8 0 4 4 0 008 0zm4-10a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Total Staffs</p>
-                        <h2 class="text-2xl font-bold text-gray-800">{{$totalStaffs}}</h2>
+                        <p class="text-xs font-semibold tracking-wide uppercase text-slate-400">Total Staffs</p>
+                        <h2 class="text-2xl font-extrabold font-display text-navy">{{$totalStaffs}}</h2>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition h-1/2">
-                <div class="flex items-center space-x-4 h-full">
-                    <div class="bg-green-100 p-3 rounded-full">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+            <div class="p-6 transition bg-white border shadow-sm rounded-2xl border-slate-200 hover:shadow-md">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-yellow/20 p-3.5 rounded-xl">
+                        <svg class="w-6 h-6 text-yellow-deep" fill="none" stroke="currentColor" stroke-width="2"
                              viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                         </svg>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Active Staffs</p>
-                        <h2 class="text-2xl font-bold text-gray-800">0</h2>
+                        <p class="text-xs font-semibold tracking-wide uppercase text-slate-400">Active Staffs</p>
+                        <h2 class="text-2xl font-extrabold font-display text-navy">0</h2>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-md xl:col-span-2 h-full overflow-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-700">Recent Account Creations</h2>
+        <div class="p-6 bg-white border shadow-sm rounded-2xl border-slate-200 xl:col-span-2">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold font-display text-navy">Recent Account Creations</h2>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-600">
-                    <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs tracking-wide uppercase bg-slate-50 text-slate-500">
                         <tr>
-                            <th class="px-4 py-3">ID</th>
-                            <th class="px-4 py-3">Name</th>
-                            <th class="px-4 py-3">Email</th>
-                            <th class="px-4 py-3">Created At</th>
+                            <th class="px-4 py-3 font-semibold">ID</th>
+                            <th class="px-4 py-3 font-semibold">Name</th>
+                            <th class="px-4 py-3 font-semibold">Email</th>
+                            <th class="px-4 py-3 font-semibold">Created At</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
+                    <tbody class="divide-y divide-slate-100">
                          @forelse($staffs as $staff)
-                            <tr>
-                                <td class="px-4 py-3">{{ $staff->id }}</td>
-                                <td class="px-4 py-3">{{ $staff->name }}</td>
+                            <tr class="transition hover:bg-slate-50/70">
+                                <td class="px-4 py-3 text-slate-400">{{ $staff->id }}</td>
+                                <td class="px-4 py-3 font-bold font-display text-navy">{{ $staff->name }}</td>
                                 <td class="px-4 py-3">{{ $staff->email }}</td>
-                                <td class="px-4 py-3">{{ $staff->created_at->format('M d, Y') }}</td>
+                                <td class="px-4 py-3 text-slate-500">{{ $staff->created_at->format('M d, Y') }}</td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center px-4 py-6 text-gray-400">
+                                <td colspan="4" class="px-4 py-10 text-center text-slate-400">
                                     No recent account creation
                                 </td>
                             </tr>

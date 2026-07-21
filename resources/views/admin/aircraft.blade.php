@@ -1,76 +1,85 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold">Aircraft Management</h1>
-        <button onclick="document.getElementById('addAircraftModal').classList.remove('hidden')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-            Add Aircraft
+<div class="max-w-6xl mx-auto">
+    <div class="flex items-end justify-between mb-8">
+        <div>
+            <div class="mb-1 text-xs font-bold tracking-widest uppercase text-sky">Fleet</div>
+            <h1 class="text-3xl font-extrabold font-display text-navy">Aircraft Management</h1>
+        </div>
+        <button onclick="document.getElementById('addAircraftModal').classList.remove('hidden')"
+            class="font-display font-bold text-sm bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-mid transition">
+            + Add Aircraft
         </button>
     </div>
 
-    <div class="overflow-x-auto bg-white rounded shadow">
+    <div class="overflow-x-auto bg-white border shadow-sm rounded-2xl border-slate-200">
         <table class="min-w-full text-sm text-left">
-            <thead class="bg-gray-100">
+            <thead class="bg-slate-50">
                 <tr>
-                    <th class="px-6 py-3 font-medium text-gray-700">Model</th>
-                    <th class="px-6 py-3 font-medium text-gray-700">Manufacturer</th>
-                    <th class="px-6 py-3 font-medium text-gray-700">Seat Capacity</th>
-                    <th class="px-6 py-3 font-medium text-gray-700">Actions</th>
+                    <th class="px-6 py-4 text-xs font-semibold tracking-wide uppercase text-slate-500">Model</th>
+                    <th class="px-6 py-4 text-xs font-semibold tracking-wide uppercase text-slate-500">Manufacturer</th>
+                    <th class="px-6 py-4 text-xs font-semibold tracking-wide uppercase text-slate-500">Seat Capacity</th>
+                    <th class="px-6 py-4 text-xs font-semibold tracking-wide uppercase text-slate-500">Actions</th>
                 </tr>
             </thead>
-            <tbody class="divide-y">
-                @foreach ($aircraft as $plane)
-                <tr>
-                    <td class="px-6 py-4">{{ $plane->model }}</td>
-                    <td class="px-6 py-4">{{ $plane->manufacturer }}</td>
-                    <td class="px-6 py-4">{{ $plane->seat_capacity }}</td>
+            <tbody class="divide-y divide-slate-100">
+                @forelse ($aircraft as $plane)
+                <tr class="transition hover:bg-slate-50/70">
+                    <td class="px-6 py-4 font-bold font-display text-navy">{{ $plane->model }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ $plane->manufacturer }}</td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center bg-navy/5 text-navy text-xs font-semibold px-2.5 py-1 rounded-full">
+                            {{ $plane->seat_capacity }} seats
+                        </span>
+                    </td>
                     <td class="px-6 py-4 space-x-4">
-                        <button
-                            type="button"
-                            class="text-blue-600 hover:underline edit-aircraft-btn"
+                        <button type="button" class="font-medium text-sky hover:underline edit-aircraft-btn"
                             data-id="{{ $plane->id }}"
                             data-model="{{ $plane->model }}"
                             data-manufacturer="{{ $plane->manufacturer }}"
-                            data-seat_capacity="{{ $plane->seat_capacity }}"
-                        >
+                            data-seat_capacity="{{ $plane->seat_capacity }}">
                             Edit
                         </button>
-
                         <form action="{{ route('admin-aircraft-delete', $plane->id) }}" method="POST" class="inline-block delete-aircraft-form">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                            <button type="submit" class="font-medium text-red-500 hover:underline">Delete</button>
                         </form>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="4" class="py-10 text-center text-slate-400">No aircraft found</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
 </div>
 
-<div id="addAircraftModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
-        <button onclick="document.getElementById('addAircraftModal').classList.add('hidden')" class="absolute top-2 right-2 text-gray-600 hover:text-black text-lg">&times;</button>
-        <h2 class="text-xl font-bold mb-4">Add New Aircraft</h2>
+<div id="addAircraftModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-navy/40 backdrop-blur-sm">
+    <div class="relative w-full max-w-md bg-white shadow-2xl rounded-2xl p-7">
+        <button onclick="document.getElementById('addAircraftModal').classList.add('hidden')"
+            class="absolute text-xl leading-none top-4 right-4 text-slate-400 hover:text-navy">&times;</button>
+        <h2 class="mb-5 text-xl font-bold font-display text-navy">Add New Aircraft</h2>
 
-        <form action="{{ route('admin-aircraft-store') }}" method="POST" onsubmit="confirmAdd(event);">
+        <form action="{{ route('admin-aircraft-store') }}" method="POST" onsubmit="confirmAdd(event);" class="space-y-4">
             @csrf
             <div>
-                <label class="block font-medium">Model</label>
-                <input type="text" name="model" required class="w-full border px-3 py-2 rounded" />
+                <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Model</label>
+                <input type="text" name="model" required class="w-full border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none px-3.5 py-2.5 rounded-lg transition" />
             </div>
             <div>
-                <label class="block font-medium">Manufacturer</label>
-                <input type="text" name="manufacturer" required class="w-full border px-3 py-2 rounded" />
+                <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Manufacturer</label>
+                <input type="text" name="manufacturer" required class="w-full border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none px-3.5 py-2.5 rounded-lg transition" />
             </div>
             <div>
-                <label class="block font-medium">Seat Capacity</label>
-                <input type="number" name="seat_capacity" required class="w-full border px-3 py-2 rounded" />
+                <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Seat Capacity</label>
+                <input type="number" name="seat_capacity" required class="w-full border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none px-3.5 py-2.5 rounded-lg transition" />
             </div>
-            <div class="text-right">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mt-4">
+            <div class="pt-2 text-right">
+                <button type="submit" class="font-display font-bold text-sm bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-mid transition">
                     Add
                 </button>
             </div>
@@ -78,36 +87,36 @@
     </div>
 </div>
 
-<div id="editAircraftModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
-        <button onclick="document.getElementById('editAircraftModal').classList.add('hidden')" class="absolute top-2 right-2 text-gray-600 hover:text-black text-lg">&times;</button>
-        <h2 class="text-xl font-bold mb-4">Edit Aircraft</h2>
+<div id="editAircraftModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-navy/40 backdrop-blur-sm">
+    <div class="relative w-full max-w-md bg-white shadow-2xl rounded-2xl p-7">
+        <button onclick="document.getElementById('editAircraftModal').classList.add('hidden')"
+            class="absolute text-xl leading-none top-4 right-4 text-slate-400 hover:text-navy">&times;</button>
+        <h2 class="mb-5 text-xl font-bold font-display text-navy">Edit Aircraft</h2>
 
-        <form id="editAircraftForm" method="POST" onsubmit="confirmAircraftUpdate(event)">
+        <form id="editAircraftForm" method="POST" onsubmit="confirmAircraftUpdate(event)" class="space-y-4">
             @csrf
             @method('PUT')
             <input type="hidden" name="id" id="edit_aircraft_id">
             <div>
-                <label class="block font-medium">Model</label>
-                <input type="text" name="model" id="edit_model" required class="w-full border px-3 py-2 rounded" />
+                <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Model</label>
+                <input type="text" name="model" id="edit_model" required class="w-full border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none px-3.5 py-2.5 rounded-lg transition" />
             </div>
             <div>
-                <label class="block font-medium">Manufacturer</label>
-                <input type="text" name="manufacturer" id="edit_manufacturer" required class="w-full border px-3 py-2 rounded" />
+                <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Manufacturer</label>
+                <input type="text" name="manufacturer" id="edit_manufacturer" required class="w-full border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none px-3.5 py-2.5 rounded-lg transition" />
             </div>
             <div>
-                <label class="block font-medium">Seat Capacity</label>
-                <input type="number" name="seat_capacity" id="edit_seat_capacity" required class="w-full border px-3 py-2 rounded" />
+                <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Seat Capacity</label>
+                <input type="number" name="seat_capacity" id="edit_seat_capacity" required class="w-full border border-slate-200 bg-slate-50 focus:bg-white focus:border-navy outline-none px-3.5 py-2.5 rounded-lg transition" />
             </div>
-            <div class="text-right">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mt-4">
+            <div class="pt-2 text-right">
+                <button type="submit" class="font-display font-bold text-sm bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-mid transition">
                     Update
                 </button>
             </div>
         </form>
     </div>
 </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -118,6 +127,8 @@ function confirmAdd(event){
         title: 'Are you sure you want to add this aircraft?',
         icon: 'question',
         showCancelButton: true,
+        confirmButtonColor: '#000053',
+        cancelButtonColor: '#94a3b8',
         confirmButtonText: 'Yes, add',
         cancelButtonText: 'Cancel',
         }).then((result) => {
@@ -137,6 +148,8 @@ function confirmAdd(event){
                     title: 'Edit this aircraft?',
                     icon: 'question',
                     showCancelButton: true,
+                    confirmButtonColor: '#000053',
+                    cancelButtonColor: '#94a3b8',
                     confirmButtonText: 'Yes, edit',
                 }).then(result => {
                     if (result.isConfirmed) {
@@ -186,6 +199,8 @@ function confirmAdd(event){
             title: 'Update this aircraft?',
             icon: 'question',
             showCancelButton: true,
+            confirmButtonColor: '#000053',
+            cancelButtonColor: '#94a3b8',
             confirmButtonText: 'Yes, update',
         }).then(result => {
             if (result.isConfirmed) {

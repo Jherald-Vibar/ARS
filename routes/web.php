@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Passenger\PassengerController;
 use App\Http\Controllers\Staff\StaffController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Flights;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('voyair_airlines_landing-page');
+    $flights = Flights::with(['aircraft', 'arrivalAirport', 'departureAirport'])->get();
+    return view('voyair_airlines_landing-page', compact('flights'));
 })->name('landing-page');
 
 //Auth
